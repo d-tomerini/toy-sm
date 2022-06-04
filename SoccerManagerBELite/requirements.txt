@@ -1,0 +1,9 @@
+fastapi~=0.78.0
+uvicorn
+SQLAlchemy~=1.4.37
+pydantic[email]~=1.9.1
+passlib~=1.7.4
+names~=0.3.0
+pycountry~=22.3.5
+python-multipart
+python-jose[cryptography]
