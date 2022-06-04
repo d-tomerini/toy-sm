@@ -52,8 +52,17 @@ def player_already_yours():
     )
 
 
+def player_not_on_sale():
+    return HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="player not on market list"
+    )
+
+
 def insufficient_funds():
     return HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
         detail="user does not have enough money to buy player"
     )
+
+

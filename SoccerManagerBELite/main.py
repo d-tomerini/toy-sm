@@ -1,16 +1,15 @@
 import sqlalchemy
+from sqlalchemy.orm import Session
+from database import engine, SessionLocal
 from fastapi import FastAPI, Depends
-import auth
+from fastapi.security import OAuth2PasswordRequestForm
 import exceptions
 from core.config import settings
-from database import engine, SessionLocal
-from sqlalchemy.orm import Session
+import auth
 import crud
 import models
 import schemas
-from typing import Optional
 from utils import generate_team, generate_players
-from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
 
 
@@ -27,11 +26,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-@app.get("/")
-async def create_database(db: Session = Depends(get_db)):
-    return db.query(sqlalchemy.func.sum(models.Player.value)).where(models.Player.team_id == 1).scalar()
 
 
 @app.post("/login")
@@ -68,7 +62,10 @@ def get_team_details(email: str = Depends(auth.get_email_from_token), db: Sessio
     if not user:
         raise exceptions.user_exception()
     team = crud.get_team_by_user_id(db, user.id)
-    return schemas.Team.from_orm(team)
+    team_value = crud.get_team_value(db, team)
+    team_dict = schemas.Team.from_orm(team).dict()
+    team_dict.update({'value': team_value})
+    return team_dict
 
 
 @app.get("/team/update")
@@ -144,6 +141,26 @@ def sell_player(
     sold_player = schemas.Db_Player.from_orm(db_player)
     return msg, db_player
 
+
+@app.get("/market/withdraw")
+def sell_player(
+        player_id: int,
+        email: str = Depends(auth.get_email_from_token),
+        db: Session = Depends(get_db)
+        ):
+    user = crud.get_user_by_email(db, email)
+    if not user:
+        raise exceptions.user_exception()
+    player = crud.get_player_by_player_id(db, player_id)
+    if not player:
+        raise exceptions.player_does_not_exist()
+    user_team = crud.get_team_by_user_id(db, user.id)
+    if player.team_id != user_team.id:
+        raise exceptions.player_unavailable()
+    if not player.on_market:
+        raise exceptions.player_not_on_sale()
+    db_player = crud.remove_player_for_sale(db, player)
+    return db_player
 
 @app.get("/market/buy")
 def buy_player(

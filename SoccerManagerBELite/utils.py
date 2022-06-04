@@ -50,4 +50,4 @@ def random_country():
 
 def random_markup(price: int):
     markup = randint(params.markup['min'], params.markup['max'])
-    return int(price * markup)
+    return int(price * (1 + markup/100))

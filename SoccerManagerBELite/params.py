@@ -19,4 +19,4 @@ team_size = {
 
 budget = 5000000
 initial_player_value = 1000000
-markup = {'min': 110, 'max': 200}
+markup = {'min': 10, 'max': 100}

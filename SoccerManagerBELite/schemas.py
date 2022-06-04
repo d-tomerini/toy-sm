@@ -33,7 +33,7 @@ class Player(BaseModel):
 
 
 class Db_Player(BaseModel):
-    id:int
+    id: int
     name: str
     surname: str
     country: str

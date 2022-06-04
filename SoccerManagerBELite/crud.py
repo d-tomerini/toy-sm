@@ -103,13 +103,10 @@ def update_player(db, player: models.Player, player_name, player_surname, player
     return player
 
 
-
-def add_team_value(db: Session, team: models.Team):
-    # augmented_team = db.query(models.Team, models.Player.team_id, func.sum(models.Player.value).label('value'))\
-    #    .filter(models.Player.team_id == models.Team.id).all()
-    # augmented_team = db.query(models.Player).join(models.Team).all()
-    # return augmented_team
-    return team
+def get_team_value(db: Session, team: models.Team):
+    team_value = db.query(func.sum(models.Player.value).label('team_value'))\
+        .filter(models.Player.team_id == team.id).group_by(models.Player.team_id).scalar()
+    return team_value
 
 
 def put_player_for_sale(db: Session, player: models.Player, price: int):
@@ -125,6 +122,13 @@ def acquire_player(db: Session, player: models.Player, user_team: models.Team):
     seller_team.budget += player.requested_value
     player.team_id = user_team.id
     player.value = utils.random_markup(player.value)
+    player.on_market = False
+    player.requested_value = None
+    db.commit()
+    return player
+
+
+def remove_player_for_sale(db: Session, player: models.Player):
     player.on_market = False
     player.requested_value = None
     db.commit()
