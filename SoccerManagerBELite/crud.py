@@ -1,3 +1,5 @@
+# database utils
+
 from sqlalchemy.orm import Session
 import models
 import schemas
@@ -11,8 +13,8 @@ def get_user_by_id(db: Session, user_id: int) -> models.User:
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
-def get_user_by_email(db: Session, email: str) -> models.User:
-    return db.query(models.User).filter(models.User.email == email).first()
+def get_user_by_username(db: Session, username: str) -> models.User:
+    return db.query(models.User).filter(models.User.username == username).first()
 
 
 def get_team_by_user_id(db: Session, user_id: int) -> models.Team:
@@ -37,7 +39,7 @@ def get_players_on_market(db: Session) -> List[models.Player]:
 
 def create_user(db: Session, user: schemas.User) -> models.User:
     db_user = models.User(
-        email=user.email,
+        username=user.username,
         hashed_password=get_password_hash(user.password))
     db.add(db_user)
     db.commit()
@@ -74,8 +76,8 @@ def create_players(db: Session, players: List[schemas.MarketPlayer]):
     return
 
 
-def authenticate_user(db: Session, email: str, password: str):
-    user = get_user_by_email(db, email)
+def authenticate_user(db: Session, username: str, password: str):
+    user = get_user_by_username(db, username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -83,7 +85,7 @@ def authenticate_user(db: Session, email: str, password: str):
     return user
 
 
-def update_team(db:Session, team: models.Team, team_name, country):
+def update_team(db: Session, team: models.Team, team_name, country):
     if team_name:
         team.name = team_name
     if country:
@@ -104,7 +106,7 @@ def update_player(db, player: models.Player, player_name, player_surname, player
 
 
 def get_team_value(db: Session, team: models.Team):
-    team_value = db.query(func.sum(models.Player.value).label('team_value'))\
+    team_value = db.query(func.sum(models.Player.value).label('team_value')) \
         .filter(models.Player.team_id == team.id).group_by(models.Player.team_id).scalar()
     return team_value
 

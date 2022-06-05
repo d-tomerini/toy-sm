@@ -1,5 +1,5 @@
-from database import engine
 from fastapi import FastAPI
+from database import engine
 from core.config import settings
 from routers import auth, market, players, team
 import models

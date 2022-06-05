@@ -1,3 +1,5 @@
+# fastapi exceptions for convenience
+
 from fastapi import HTTPException, status
 
 

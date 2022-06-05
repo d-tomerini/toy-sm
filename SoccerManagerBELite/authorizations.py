@@ -24,12 +24,12 @@ def verify_password(password, hashed_password):
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='token')
 
 
-async def get_email_from_token(token: str = Depends(oauth2_bearer)):
+async def get_username_from_token(token: str = Depends(oauth2_bearer)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
+        username: str = payload.get("sub")
+        if username is None:
             raise exceptions.token_exception()
     except JWTError:
         raise exceptions.token_exception()
-    return email
+    return username

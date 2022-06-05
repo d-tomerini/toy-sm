@@ -4,7 +4,7 @@ from params import Role
 
 
 class User(BaseModel):
-    email: EmailStr
+    username: EmailStr
     password: str
 
     class Config:
@@ -23,6 +23,7 @@ class Team(BaseModel):
 
 
 class Player(BaseModel):
+    id: Optional[int]
     name: str
     surname: str
     country: str
@@ -32,7 +33,7 @@ class Player(BaseModel):
     team_id: str
 
 
-class Db_Player(BaseModel):
+class DBPlayer(BaseModel):
     id: int
     name: str
     surname: str
@@ -44,7 +45,6 @@ class Db_Player(BaseModel):
 
     class Config:
         orm_mode = True
-
 
 
 class MarketPlayer(Player):

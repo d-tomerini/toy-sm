@@ -7,3 +7,4 @@ names~=0.3.0
 pycountry~=22.3.5
 python-multipart
 python-jose[cryptography]
+pytest~=7.1.2

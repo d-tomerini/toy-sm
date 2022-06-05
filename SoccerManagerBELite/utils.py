@@ -14,7 +14,7 @@ def generate_team(user: models.User):
     """
     return schemas.Team(
         user_id=user.id,
-        name=f'Team of {user.email}',
+        name=f'Team of {user.username}',
         country=random_country(),
         budget=params.budget
     )
