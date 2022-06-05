@@ -9,8 +9,8 @@ App can be run on a local machine using the uvicorn ASGI web server as:
 - `uvicorn main:app --host 127.0.0.1 --port 8000`, where host  and port can be adapted.
 
 ## API description
-FastAPI provides an openAPI description at the 127.0.0.1/docs page when the server is running.
-This can also be used for testing purposes.
+FastAPI automatically provides an openAPI description at  `127.0.0.1/docs` page when the server is running.
+This can also be used for testing purposes, along with other tools as `postman`.
 
 The different routes available are:
 - `/auth` for tasks related to authentication. 
@@ -23,11 +23,8 @@ The different routes available are:
   - `/market/buy` is used to buy a player. User must authenticate with a JWT, provide a `player_id` (must belong to another user). If the user team has enough budget, the player will be transferred to its team, budget adjusted, player value updated (based on player current value, not `asking_price`).
 - `/team` for tasks related to team management. 
   - `/team/user` list the team property to the authenticated user.
-  - `/team/updated` provides an endpoint to update the `team_country` and the `team_name`, as parameters of the query, to the authenticated user.
+  - `/team/update` provides an endpoint to update the `team_country` and the `team_name`, as parameters of the query, to the authenticated user.
 - `/players` for tasks related to player management. 
   - `/players/user` list the list of players, with their current properties, to the authenticated user.
-  - `/players/updated` provides an endpoint to update the `player_surname`, `player_name`, `player_country`, as parameters of the query, to the authenticated user.
+  - `/players/update` provides an endpoint to update the `player_surname`, `player_name`, `player_country`, as parameters of the query, to the authenticated user.
   
-
-
-
