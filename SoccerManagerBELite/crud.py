@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 import utils
-from auth import get_password_hash, verify_password
+from authorizations import get_password_hash, verify_password
 from typing import List
 from sqlalchemy import func
 

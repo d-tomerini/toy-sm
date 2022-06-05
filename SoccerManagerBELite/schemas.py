@@ -53,4 +53,3 @@ class MarketPlayer(Player):
 
     class Config:
         orm_mode = True
-

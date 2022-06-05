@@ -1,11 +1,7 @@
-from datetime import datetime, timedelta
-from typing import Optional
-
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-
 import exceptions
 
 SECRET_KEY = 'testing'
@@ -26,18 +22,6 @@ def verify_password(password, hashed_password):
 
 
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='token')
-
-
-def create_access_token(username: str, expires_by: Optional[timedelta] = None):
-    if expires_by:
-        expire = datetime.utcnow() + expires_by
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15 )
-    encode = {
-        'sub': username,
-        'exp': expire
-    }
-    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 async def get_email_from_token(token: str = Depends(oauth2_bearer)):
